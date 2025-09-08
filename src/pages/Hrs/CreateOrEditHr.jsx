@@ -290,16 +290,19 @@ const CreateOrEditHr = () => {
         )}
       </div>
       {showVerifyPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-semibold text-purple-300 mb-3">
+            <h3 className="text-lg font-semibold text-purple-300 mb-3 text-center">
               Verify Email
             </h3>
-            <p className="text-gray-300 mb-4">
-              Are you sure this email is already verified? If not, we can check
-              it using the verification API.
+            <p className="text-gray-300 mb-4 text-center">
+              Are you sure this email is already verified? If not, you can
+              verify it using the Verification API, but note that only{" "}
+              <span className="font-bold">2</span> verifications are allowed per
+              day.
             </p>
-            <div className="flex justify-end gap-3">
+
+            <div className="flex justify-center gap-3">
               <button
                 className="px-3 py-2 rounded bg-gray-700 hover:bg-gray-600"
                 onClick={() => {
