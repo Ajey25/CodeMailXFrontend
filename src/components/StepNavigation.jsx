@@ -1,4 +1,3 @@
-// src/pages/campaign/components/StepNavigation.jsx
 import React from "react";
 
 const StepNavigation = ({
@@ -12,12 +11,12 @@ const StepNavigation = ({
   isSaving = false,
 }) => {
   return (
-    <div className="flex justify-between mt-6">
-      {/* Cancel Button - Disabled during saving */}
+    <div className="flex flex-col sm:flex-row justify-between mt-6 gap-3 sm:gap-0">
+      {/* Cancel Button */}
       <button
         onClick={onCancel}
         disabled={isSaving}
-        className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium
+        className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium w-full sm:w-auto
           ${
             isSaving
               ? "bg-gray-500 border-gray-400 cursor-not-allowed text-gray-300"
@@ -27,13 +26,13 @@ const StepNavigation = ({
         Cancel
       </button>
 
-      <div className="flex gap-3">
-        {/* Back Button - Disabled during saving */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+        {/* Back Button */}
         {currentStep > 0 && (
           <button
             onClick={onPrev}
             disabled={isSaving}
-            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium
+            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium w-full sm:w-auto
               ${
                 isSaving
                   ? "bg-gray-500 border-gray-400 cursor-not-allowed text-gray-300"
@@ -44,12 +43,12 @@ const StepNavigation = ({
           </button>
         )}
 
-        {/* Next or Finish */}
+        {/* Next / Finish */}
         {currentStep < totalSteps - 1 ? (
           <button
             onClick={onNext}
             disabled={!canProceed || isSaving}
-            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium
+            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium w-full sm:w-auto
               ${
                 canProceed && !isSaving
                   ? "bg-purple-600 hover:bg-purple-500 border-purple-400 text-white"
@@ -88,7 +87,7 @@ const StepNavigation = ({
           <button
             onClick={onFinish}
             disabled={!canProceed || isSaving}
-            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium flex items-center justify-center min-w-[140px]
+            className={`px-4 py-2 rounded-lg shadow-md border transition-all duration-200 font-medium flex items-center justify-center w-full sm:w-auto min-w-[120px]
               ${
                 canProceed && !isSaving
                   ? "bg-green-600 hover:bg-green-500 border-green-400 text-white"

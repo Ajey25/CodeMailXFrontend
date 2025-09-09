@@ -12,10 +12,12 @@ import Dashboard from "../pages/Dashboard";
 import Hrs from "../pages/Hrs";
 import Templates from "../pages/Templates/Templates";
 import TemplateForm from "../pages/Templates/TemplateForm";
+
 import MailKeys from "../pages/MailKeys";
 import PageWrapper from "../components/PageWrapper";
 import ProtectedRoute from "../routes/ProtectedRoute"; // 👈 Import it
 import Campaigns from "../pages/Campaign/Campaigns";
+import AITemplateForm from "../pages/Templates/AITemplateForm";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -91,6 +93,14 @@ const AppRoutes = () => {
                 element={
                   <PageWrapper>
                     <TemplateForm />
+                  </PageWrapper>
+                }
+              />
+              <Route
+                path="templates/AITemplateForm"
+                element={
+                  <PageWrapper>
+                    <AITemplateForm />
                   </PageWrapper>
                 }
               />

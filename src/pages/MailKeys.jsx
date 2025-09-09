@@ -163,14 +163,14 @@ const MailKeys = () => {
           <p className="text-xs text-gray-400 mt-6">
             ⚠️{" "}
             <a
-              href="https://support.google.com/accounts/answer/185833"
+              href="https://myaccount.google.com/apppasswords"
               target="_blank"
               rel="noopener noreferrer"
               className="text-purple-400 underline"
             >
               Create an app password here
             </a>{" "}
-            (Google account → Security → App passwords).
+            (Enter app name → Copy app passwords → Paste it without spaces).
           </p>
         </motion.div>
 

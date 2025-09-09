@@ -1,4 +1,3 @@
-// src/pages/campaign/steps/Step2.jsx
 import React, { useEffect, useState } from "react";
 import { apiService } from "../../../services/api";
 
@@ -22,7 +21,7 @@ const Step2 = ({ formData, setFormData }) => {
     fetchTemplates();
   }, []);
 
-  // When in edit mode, auto-select the right template once templates are loaded
+  // Auto-select template in edit mode
   useEffect(() => {
     if (formData.template && templates.length > 0) {
       const selectedTemplate = templates.find(
@@ -50,23 +49,25 @@ const Step2 = ({ formData, setFormData }) => {
   };
 
   return (
-    <div>
-      <h4 className="text-lg font-semibold mb-3">Step 2: Select Template</h4>
+    <div className="text-white w-full ">
+      <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-purple-400">
+        Step 2: Select Template
+      </h4>
 
       {loading ? (
-        <div className="flex justify-center py-3">
-          <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex justify-center py-6">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
-        <form className="space-y-4">
+        <form className="space-y-4 sm:space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-200 mb-1">
+            <label className="block text-sm sm:text-base font-medium text-gray-200 mb-1">
               Choose a Template
             </label>
             <select
               value={formData.template || ""}
               onChange={handleSelectTemplate}
-              className="w-full px-3 py-2 border border-gray-600 bg-gray-900 text-white rounded-md shadow-sm 
+              className="w-full px-3 py-2 border border-gray-600 bg-gray-900 text-white text-sm sm:text-base rounded-md shadow-sm 
                          focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
               <option value="">-- Select Template --</option>
@@ -80,15 +81,17 @@ const Step2 = ({ formData, setFormData }) => {
 
           {/* Preview section */}
           {formData.selectedTemplate && (
-            <div className="mt-4 p-4 border border-gray-700 rounded bg-gray-800">
-              <h5 className="font-semibold text-purple-400">Preview</h5>
-              <p className="text-sm text-gray-300 mt-1">
+            <div className="mt-4 sm:mt-6 p-4 border border-gray-700 rounded bg-gray-800">
+              <h5 className="font-semibold text-purple-400 text-sm sm:text-base mb-2">
+                Preview
+              </h5>
+              <p className="text-sm sm:text-base text-gray-300 mb-2">
                 <strong>Subject:</strong> {formData.selectedTemplate.subject}
               </p>
-              <pre className="text-gray-200 text-sm mt-2 whitespace-pre-wrap">
+              <pre className="text-gray-200 text-sm sm:text-base whitespace-pre-wrap mb-2">
                 {formData.selectedTemplate.body}
               </pre>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs sm:text-sm text-gray-400">
                 Placeholders:{" "}
                 {formData.selectedTemplate.placeholders?.join(", ") || "None"}
               </p>

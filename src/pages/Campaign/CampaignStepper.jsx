@@ -1,4 +1,3 @@
-// src/pages/campaign/CampaignStepper.jsx
 import React, { useState, useEffect } from "react";
 import Step1Details from "./steps/Step1";
 import Step2Template from "./steps/Step2";
@@ -8,6 +7,7 @@ import StepperNav from "../../components/StepperNav";
 import StepNavigation from "../../components/StepNavigation";
 import { apiService } from "../../services/api";
 import toast from "react-hot-toast";
+import SendCampaignPopup from "./SendCampaignPopup";
 
 const CampaignStepper = ({ onCancel, campaignToEdit }) => {
   const steps = [
@@ -17,7 +17,6 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
     { label: "Review", component: Step4Review },
   ];
   const [isSending, setIsSending] = useState(false);
-
   const [currentStep, setCurrentStep] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [completedSteps, setCompletedSteps] = useState({});
@@ -35,7 +34,6 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
         console.error("Failed to fetch email limit", err);
       }
     };
-
     fetchLimit();
   }, []);
 
@@ -50,7 +48,6 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
 
   const CurrentStepComponent = steps[currentStep].component;
 
-  // Handle editing mode
   useEffect(() => {
     if (campaignToEdit) {
       setIsEditing(true);
@@ -62,8 +59,6 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
         selectedTemplate: campaignToEdit.template || null,
         placeholders: campaignToEdit.placeholders || {},
       });
-
-      // Mark all steps as completed initially
       const allCompleted = {};
       steps.forEach((_, i) => (allCompleted[i] = true));
       setCompletedSteps(allCompleted);
@@ -87,11 +82,7 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
         formData.hrList.length > 0
       );
     }
-
-    if (currentStep === 1) {
-      return formData.template?.toString().trim() !== "";
-    }
-
+    if (currentStep === 1) return formData.template?.toString().trim() !== "";
     if (currentStep === 2) {
       if (!formData.selectedTemplate) return false;
       const templatePlaceholders = formData.selectedTemplate.placeholders || [];
@@ -101,23 +92,19 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
           formData.placeholders[key] && formData.placeholders[key].trim() !== ""
       );
     }
-
     return true;
   };
 
   const handleSaveCampaign = async () => {
     if (!validateStep()) return;
-
-    // check limit before saving
     if (emailLimit && formData.hrList.length > emailLimit.remainingLimit) {
       toast.error(
-        `You can only send ${emailLimit.remainingLimit} more emails today. Please choose fewer HRs.`
+        `You can only send ${emailLimit.remainingLimit} more emails today.`
       );
       return;
     }
 
     setIsSaving(true);
-
     const apiPayload = {
       campaignName: formData.campaignName,
       company: formData.company,
@@ -141,7 +128,6 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
         data = await apiService("POST", "campaigns/", apiPayload);
         setSavedCampaignId(data._id);
       }
-
       setShowSendPrompt(true);
     } catch (err) {
       console.error("Error saving campaign:", err);
@@ -157,15 +143,12 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
 
   const handleSendNow = async () => {
     if (!savedCampaignId || isSending) return;
-
-    // Check email limit before sending
     if (emailLimit && formData.hrList.length > emailLimit.remainingLimit) {
       toast.error(
-        `You only have ${emailLimit.remainingLimit} emails left today. Please choose fewer HRs.`
+        `You only have ${emailLimit.remainingLimit} emails left today.`
       );
       return;
     }
-
     setIsSending(true);
     try {
       await apiService("POST", `campaigns/${savedCampaignId}/send`);
@@ -181,10 +164,10 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
   };
 
   return (
-    <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-purple-800 rounded-xl shadow-xl p-6 w-full max-w-5xl">
+    <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm border border-purple-800 rounded-xl shadow-xl p-4 sm:p-6 w-full  mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-purple-400">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 sm:gap-0">
+        <h2 className="text-lg sm:text-xl font-bold text-purple-400">
           {isEditing ? "Edit Campaign" : "Create New Campaign"}
         </h2>
         {isEditing && (
@@ -194,108 +177,45 @@ const CampaignStepper = ({ onCancel, campaignToEdit }) => {
         )}
       </div>
 
+      {/* Stepper Navigation */}
       <StepperNav
         steps={steps}
         currentStep={currentStep}
         completedSteps={completedSteps}
       />
 
-      <div className="mt-6">
+      {/* Current Step Component */}
+      <div className="mt-4 sm:mt-6">
         <CurrentStepComponent formData={formData} setFormData={setFormData} />
       </div>
 
+      {/* Step Navigation Buttons */}
       <StepNavigation
         currentStep={currentStep}
         totalSteps={steps.length}
         onPrev={handlePrev}
         onNext={handleNext}
-        onFinish={handleSaveCampaign} // Changed from handleFinish to handleSaveCampaign
+        onFinish={handleSaveCampaign}
         onCancel={onCancel}
         canProceed={validateStep()}
         isSaving={isSaving}
       />
 
-      {/* Popup for Send Confirmation */}
-      {showSendPrompt && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
-          <div className="bg-gray-900 border border-purple-700 rounded-xl p-6 w-full max-w-md shadow-xl">
-            <h3 className="text-lg font-bold text-purple-400 mb-4">
-              Send Campaign Now?
-            </h3>
-
-            <p className="text-gray-300 mb-6">
-              Your campaign has been saved. Do you want to send it right now?
-              <br />
-              {emailLimit && (
-                <span className="text-yellow-400 font-medium">
-                  Remaining emails today: {emailLimit.remainingLimit} /{" "}
-                  {emailLimit.maxLimit}
-                </span>
-              )}
-            </p>
-
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => {
-                  setShowSendPrompt(false);
-                  onCancel();
-                }}
-                disabled={isSending}
-                className={`px-4 py-2 rounded-lg border transition-all duration-200 ${
-                  isSending
-                    ? "border-gray-500 text-gray-400 cursor-not-allowed"
-                    : "border-gray-500 text-gray-300 hover:bg-gray-800"
-                }`}
-              >
-                Maybe Later
-              </button>
-
-              <button
-                onClick={handleSendNow}
-                disabled={
-                  isSending ||
-                  (emailLimit &&
-                    formData.hrList.length > emailLimit.remainingLimit)
-                }
-                className={`px-4 py-2 rounded-lg flex items-center justify-center min-w-[100px] ${
-                  isSending ||
-                  (emailLimit &&
-                    formData.hrList.length > emailLimit.remainingLimit)
-                    ? "bg-purple-400 cursor-not-allowed"
-                    : "bg-purple-600 hover:bg-purple-700 text-white"
-                }`}
-              >
-                {isSending ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Sending
-                  </>
-                ) : (
-                  "Send Now"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Send Confirmation Popup */}
+      {showSendPrompt && savedCampaignId && (
+        <SendCampaignPopup
+          campaign={{
+            _id: savedCampaignId,
+            campaignName: formData.campaignName,
+            hrList: formData.hrList,
+          }}
+          emailLimit={emailLimit}
+          onClose={() => setShowSendPrompt(false)}
+          onSent={() => {
+            setShowSendPrompt(false);
+            onCancel();
+          }}
+        />
       )}
     </div>
   );

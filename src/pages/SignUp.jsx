@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react"; // 👀 icons
 import { apiService } from "../services/api";
 
 const SignUp = () => {
@@ -14,6 +15,9 @@ const SignUp = () => {
   });
 
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -59,9 +63,9 @@ const SignUp = () => {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="bg-gray-900 border border-gray-800 rounded-xl p-8 w-full max-w-4xl shadow-2xl"
+        className="bg-gray-900 border border-gray-800 rounded-xl p-6 sm:p-8 w-full max-w-4xl shadow-2xl"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
           Create your <span className="text-purple-500">MailBot</span> account
         </h2>
 
@@ -69,6 +73,7 @@ const SignUp = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
           onSubmit={handleSubmit}
         >
+          {/* First Name */}
           <div>
             <label htmlFor="firstName" className="block text-sm mb-1">
               First Name
@@ -83,6 +88,7 @@ const SignUp = () => {
             />
           </div>
 
+          {/* Last Name */}
           <div>
             <label htmlFor="lastName" className="block text-sm mb-1">
               Last Name
@@ -97,6 +103,7 @@ const SignUp = () => {
             />
           </div>
 
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm mb-1">
               Email Address
@@ -112,6 +119,7 @@ const SignUp = () => {
             />
           </div>
 
+          {/* Mobile */}
           <div>
             <label htmlFor="mobile" className="block text-sm mb-1">
               Mobile Number
@@ -127,43 +135,61 @@ const SignUp = () => {
             />
           </div>
 
-          <div>
+          {/* Password */}
+          <div className="relative">
             <label htmlFor="password" className="block text-sm mb-1">
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               required
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-4 py-3 pr-12 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
               placeholder="••••••••"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-gray-400 hover:text-gray-200"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
-          <div>
+          {/* Confirm Password */}
+          <div className="relative">
             <label htmlFor="confirmPassword" className="block text-sm mb-1">
               Confirm Password
             </label>
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
               required
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full px-4 py-3 pr-12 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
               placeholder="••••••••"
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-9 text-gray-400 hover:text-gray-200"
+            >
+              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
+          {/* Error Message */}
           {error && (
-            <div className="col-span-2 text-center text-red-400 text-sm">
+            <div className="col-span-1 md:col-span-2 text-center text-red-400 text-sm">
               {error}
             </div>
           )}
 
-          <div className="col-span-2 mt-4">
+          {/* Submit */}
+          <div className="col-span-1 md:col-span-2 mt-4">
             <button
               type="submit"
               className="w-full py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition"

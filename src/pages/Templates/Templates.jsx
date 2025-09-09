@@ -41,7 +41,7 @@ const Templates = () => {
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col bg-gradient-to-br from-purple-950 via-gray-700 to-purple-950 text-white py-4 px-8"
+      className="min-h-screen flex flex-col bg-gradient-to-br from-purple-950 via-gray-700 to-purple-950 text-white py-4 px-4"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
@@ -49,12 +49,20 @@ const Templates = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <h1 className="text-3xl font-bold text-purple-400">Templates 📝</h1>
-        <button
-          onClick={() => navigate("/layout/templates/new")}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium"
-        >
-          + Add Template
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate("/layout/templates/AITemplateForm")}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium"
+          >
+            + AI Template
+          </button>
+          <button
+            onClick={() => navigate("/layout/templates/new")}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium"
+          >
+            + Custom Template
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -69,7 +77,7 @@ const Templates = () => {
       </div>
 
       {/* Template List */}
-      <div className="rounded-xl border border-purple-800 bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow-lg p-4">
+      <div className="rounded-xl border border-purple-800 bg-gray-800 bg-opacity-50 backdrop-blur-sm shadow-lg p-3">
         <TemplateList templates={filteredTemplates} loading={loading} />
       </div>
     </motion.div>

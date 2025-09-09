@@ -7,39 +7,32 @@ const Step3 = ({ formData, setFormData }) => {
   const [placeholders, setPlaceholders] = useState({});
   const [errors, setErrors] = useState({});
 
-  // Initialize placeholders when template changes
   useEffect(() => {
     if (template) {
       let existing = {};
 
-      // 🔥 Normalize if placeholders are in array format
       if (Array.isArray(formData.placeholders)) {
         existing = formData.placeholders.reduce((acc, { key, value }) => {
           acc[key] = value;
           return acc;
         }, {});
-      }
-      // else assume object
-      else if (
+      } else if (
         formData.placeholders &&
         typeof formData.placeholders === "object"
       ) {
         existing = { ...formData.placeholders };
       }
 
-      if (Object.keys(existing).length > 0) {
-        const existingKeys = Object.keys(existing);
-        const templatesMatch =
-          placeholderKeys.every((key) => existingKeys.includes(key)) &&
-          existingKeys.every((key) => placeholderKeys.includes(key));
+      const existingKeys = Object.keys(existing);
+      const templatesMatch =
+        placeholderKeys.every((key) => existingKeys.includes(key)) &&
+        existingKeys.every((key) => placeholderKeys.includes(key));
 
-        if (templatesMatch) {
-          setPlaceholders(existing);
-          return;
-        }
+      if (templatesMatch) {
+        setPlaceholders(existing);
+        return;
       }
 
-      // if no match / nothing stored → initialize empty
       const initial = placeholderKeys.reduce((acc, key) => {
         acc[key] = "";
         return acc;
@@ -51,10 +44,7 @@ const Step3 = ({ formData, setFormData }) => {
   }, [formData.selectedTemplate, placeholderKeys.join(",")]);
 
   const handleChange = (key, value) => {
-    setPlaceholders((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setPlaceholders((prev) => ({ ...prev, [key]: value }));
 
     if (!value.trim()) {
       setErrors((prev) => ({ ...prev, [key]: "This field is required" }));
@@ -68,10 +58,7 @@ const Step3 = ({ formData, setFormData }) => {
   };
 
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      placeholders,
-    }));
+    setFormData((prev) => ({ ...prev, placeholders }));
   }, [placeholders, setFormData]);
 
   if (!template) {
@@ -101,16 +88,16 @@ const Step3 = ({ formData, setFormData }) => {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          <p className="text-sm text-gray-400 mb-4">
+        <div className="space-y-6">
+          <p className="text-sm text-gray-400">
             Fill in the following placeholders for the template "
             <span className="text-purple-400">{template.name}</span>":
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {placeholderKeys.map((key) => (
               <div key={key}>
-                <label className="block text-sm font-medium text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1 break-words">
                   {key} <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -131,7 +118,7 @@ const Step3 = ({ formData, setFormData }) => {
             ))}
           </div>
 
-          <div className="mt-6 p-3 bg-gray-800 border border-gray-700 rounded-md">
+          <div className="mt-4 p-3 bg-gray-800 border border-gray-700 rounded-md overflow-auto">
             <p className="text-sm text-gray-300">
               <strong className="text-purple-400">Preview:</strong> Your
               placeholders will replace the corresponding variables in the

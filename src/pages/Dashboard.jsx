@@ -25,7 +25,7 @@ import {
   FiStar,
 } from "react-icons/fi";
 import { apiService } from "../services/api"; // Adjust path as needed
-
+import { FaLock } from "react-icons/fa";
 // ----- HELPERS -----
 const formatDate = (iso) =>
   new Date(iso).toLocaleDateString(undefined, {
@@ -70,6 +70,13 @@ const Dashboard = () => {
         setLoading(true);
         const data = await apiService("get", "users/dashboard");
         setDashboardData(data);
+        if (data?.smtp) {
+          localStorage.setItem("smtp", JSON.stringify(data.smtp));
+          localStorage.setItem(
+            "recentCampaigns",
+            JSON.stringify(data.recentCampaigns)
+          );
+        }
       } catch (err) {
         console.error("Failed to fetch dashboard data:", err);
         setError("Failed to load dashboard data");
@@ -84,7 +91,37 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-950 via-gray-800 to-purple-950 text-white flex items-center justify-center">
-        <div className="text-xl text-purple-300">Loading dashboard...</div>
+        <div className="max-w-7xl w-full px-4 py-8 space-y-6 animate-pulse">
+          {/* Fake Title */}
+          {/* <div className="h-8 w-48 bg-gray-700 rounded-lg" /> */}
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-purple-300">
+              Mission Control 🚀
+            </h1>
+          </div>
+
+          {/* Fake Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="lg:col-span-6 bg-gray-900/50 rounded-2xl border border-purple-100/20 p-6 space-y-4"
+              >
+                {/* Fake header */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-5 w-32 bg-gray-700 rounded mb-2" />
+                    <div className="h-3 w-20 bg-gray-700 rounded" />
+                  </div>
+                  <div className="h-8 w-8 bg-gray-700 rounded-lg" />
+                </div>
+
+                {/* Fake body */}
+                <div className="h-40 w-full bg-gray-800/60 rounded-lg" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -191,25 +228,37 @@ const Dashboard = () => {
                 subtitle="Created vs Sent vs Failed"
                 icon={<FiActivity className="w-5 h-5 text-purple-300" />}
               />
-              <div className="flex flex-1 items-center justify-between">
+              <div className="flex flex-col lg:flex-row flex-1 items-center justify-between">
                 {/* Left: Pie Chart */}
-                <div className="h-52 w-1/2">
+                <div className="h-52 w-full lg:w-2/3 mb-4 lg:mb-0">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
-                        data={pieData}
+                        data={
+                          pieData.every((d) => d.value === 0)
+                            ? [{ name: "empty", value: 1 }]
+                            : pieData
+                        }
                         dataKey="value"
                         nameKey="name"
                         innerRadius={60}
                         outerRadius={85}
                         paddingAngle={3}
                       >
-                        {pieData.map((entry, index) => (
+                        {pieData.every((d) => d.value === 0) ? (
                           <Cell
-                            key={`cell-${index}`}
-                            fill={PIE_COLORS[index]}
+                            fill="transparent"
+                            stroke="rgba(156, 163, 175, 0.2 )"
+                            strokeWidth={1}
                           />
-                        ))}
+                        ) : (
+                          pieData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={PIE_COLORS[index]}
+                            />
+                          ))
+                        )}
                       </Pie>
                       <Tooltip
                         contentStyle={{
@@ -224,18 +273,18 @@ const Dashboard = () => {
                 </div>
 
                 {/* Right: Stats */}
-                <div className="w-1/2 flex flex-col space-y-3 text-lg font-medium">
+                <div className="w-full lg:w-1/2 flex flex-col space-y-3 text-lg font-medium">
                   <div className="flex items-center justify-between">
                     <span className="text-blue-400">● Created</span>
-                    <span>{campaigns.total}</span>
+                    <span className="mr-5">{campaigns.total ?? 0}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-green-400">● Sent</span>
-                    <span>{campaigns.successful}</span>
+                    <span className="mr-5">{campaigns.successful ?? 0}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-red-400">● Failed</span>
-                    <span>{campaigns.failed}</span>
+                    <span className="mr-5">{campaigns.failed ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -245,16 +294,23 @@ const Dashboard = () => {
           {/* Mail Key Card */}
           <div className="lg:col-span-6">
             {!smtp?.email || !smtp?.password ? (
-              <Card className="min-h-[320px] flex flex-col items-center justify-center text-center">
-                <div className="text-lg text-gray-300 mb-4">
-                  Mail keys are not configured yet.
+              <Card className="min-h-[320px] relative flex flex-col items-center justify-center text-center bg-gray-800 border border-gray-700">
+                {/* 🔒 Overlay lock */}
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center rounded-2xl">
+                  <FaLock className="w-12 h-12 text-gray-400 mb-3" />
+                  <div className="text-lg text-gray-300 mb-4 px-4">
+                    Mail keys are{" "}
+                    <span className="font-semibold text-white">locked</span>.
+                    <br />
+                    Without them, you cannot create campaigns or send mails.
+                  </div>
+                  <a
+                    href="https://cold-mail-x.vercel.app/layout/mailkeys"
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md"
+                  >
+                    Configure Mail Keys
+                  </a>
                 </div>
-                <a
-                  href="http://localhost:5173/layout/mailkeys"
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow-md"
-                >
-                  Configure Mail Keys
-                </a>
               </Card>
             ) : (
               <Card className="min-h-[320px] flex flex-col">
@@ -263,7 +319,7 @@ const Dashboard = () => {
                   subtitle="Operational credentials (sanitized)"
                   icon={<FiShield className="w-5 h-5 text-purple-300" />}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-1 mb-2">
                   <InfoRow label="Mail" value={smtp.email} icon={<FiMail />} />
                   <InfoRow
                     label="Nodemailer Password"
@@ -271,14 +327,10 @@ const Dashboard = () => {
                     icon={<FiShield />}
                   />
                 </div>
-                <div className="mt-4 text-sm text-gray-400">
-                  We never show the real password. Ha ha ha… but seriously,
-                  never.
-                </div>
 
                 {/* Only quota here */}
-                <div className="mt-auto mb-3">
-                  <div className="text-2xl text-gray-300 mb-4">
+                <div className="mt-auto mb-2">
+                  <div className="text-xl text-gray-300 mb-3">
                     Mails sent today:{" "}
                     <span className="font-semi-bold text-white ">
                       {emailsSentToday}/300
@@ -471,37 +523,37 @@ const Dashboard = () => {
                 icon={<FiClock className="w-5 h-5 text-purple-300" />}
               />
               <div className="space-y-6 mb-1">
-                {recentCampaigns.map((c, index) => (
-                  <div
-                    key={index}
-                    className="p-4 rounded-xl bg-gray-800/50 border border-gray-700/60 hover:border-purple-500/40 transition-all"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-white font-semibold">
-                          {c.templateName}
+                {recentCampaigns && recentCampaigns.length > 0 ? (
+                  recentCampaigns.map((c, index) => (
+                    <div
+                      key={index}
+                      className="p-4 rounded-xl bg-gray-800/50 border border-gray-700/60 hover:border-purple-500/40 transition-all"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-white font-semibold">
+                            {c.templateName}
+                          </div>
+                          <div className="text-sm text-gray-400">
+                            {c.company} • {c.templateSubject}
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-400">
-                          {c.company} • {c.templateSubject}
+                        <div className="flex items-center gap-2">
+                          <div className="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            Sent
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                          Sent
-                        </div>
-                        <button
-                          title="View"
-                          className="p-2 rounded-lg bg-gray-700 hover:bg-purple-600 transition-colors"
-                        >
-                          <FiEye className="w-5 h-5 text-gray-200" />
-                        </button>
+                      <div className="text-xs text-gray-500 mt-2">
+                        Sent {formatDate(c.sendDate)}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500 mt-2">
-                      Sent {formatDate(c.sendDate)}
-                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 text-center text-gray-400 italic">
+                    No recent campaigns found
                   </div>
-                ))}
+                )}
               </div>
             </Card>
           </div>

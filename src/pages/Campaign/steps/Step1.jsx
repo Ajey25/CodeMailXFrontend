@@ -171,12 +171,12 @@ const Step1 = ({ formData, setFormData, onNext }) => {
             setFormData((prev) => ({ ...prev, campaignName: e.target.value }))
           }
           className="w-full px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white 
-                     focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
+                 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
         />
       </div>
 
       {/* Company Name + Scope */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1">
             Company Name
@@ -216,7 +216,7 @@ const Step1 = ({ formData, setFormData, onNext }) => {
       </div>
 
       {/* HR Selection */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Available HRs */}
         <div>
           <div className="flex justify-between items-center mb-2">
