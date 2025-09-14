@@ -239,7 +239,7 @@ const CreateOrEditHr = () => {
             </div>
 
             <div className="flex items-center gap-4 mt-2">
-              <label className="flex items-center gap-2">
+              {/* <label className="flex items-center gap-2">
                 <input
                   id="isGlobal"
                   checked={form.isGlobal}
@@ -248,7 +248,7 @@ const CreateOrEditHr = () => {
                   className="h-4 w-4"
                 />
                 <span className="text-sm text-gray-300">Global</span>
-              </label>
+              </label> */}
 
               <label className="flex items-center gap-2">
                 <input

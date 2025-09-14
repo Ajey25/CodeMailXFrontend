@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Base API instance
 const api = axios.create({
-  baseURL: "/api/",
+  baseURL: "https://cold-mail-x.vercel.app/api/",
   headers: {
     "Content-Type": "application/json",
   },

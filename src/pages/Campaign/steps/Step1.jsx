@@ -67,14 +67,19 @@ const Step1 = ({ formData, setFormData, onNext }) => {
   };
 
   // Fetch companies
+  // Fetch companies
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
         const data = await apiService("get", "hr/companies");
-        setCompanies(data || []);
-        setCompanyOptions(
-          (data || []).map((c) => ({ value: c.name, label: c.name }))
-        );
+
+        // ✅ API returns { companies: ["Google"] }
+        const companiesArray = data?.companies || [];
+
+        setCompanies(companiesArray);
+        setCompanyOptions(companiesArray.map((c) => ({ value: c, label: c })));
+
+        console.log("Companies:", companiesArray);
       } catch (err) {
         console.error(err);
       }

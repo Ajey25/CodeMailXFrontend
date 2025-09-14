@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
+import logo from "../assets/unnamed (1).png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,18 @@ const Navbar = () => {
       {/* Logo */}
       <Link
         to="/"
-        className="text-3xl font-extrabold text-cyan-400 tracking-wide"
+        className="flex items-center gap-2 text-3xl font-extrabold text-cyan-400 tracking-wide"
       >
-        ColdMailX
+        <div className="flex items-center gap-3">
+          <img
+            src={logo}
+            alt="ColdMailX Logo"
+            className="w-7 h-7 sm:w-10 sm:h-10"
+          />
+          <h1 className="text-xl text-white sm:text-2xl font-bold tracking-wide">
+            <span className="text-purple-500">Cold</span>MailX
+          </h1>
+        </div>
       </Link>
 
       {/* Desktop Links */}

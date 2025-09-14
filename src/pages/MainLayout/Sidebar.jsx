@@ -12,6 +12,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { FaLock } from "react-icons/fa";
+import logo from "../../assets/unnamed (1).png";
 
 const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -152,7 +153,16 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.2 }}
                 >
-                  ColdMailX
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={logo}
+                      alt="ColdMailX Logo"
+                      className="w-7 h-7 sm:w-8 sm:h-8"
+                    />
+                    <h1 className="text-xl text-white sm:text-2xl font-bold tracking-wide">
+                      <span className="text-purple-500">Cold</span>MailX
+                    </h1>
+                  </div>
                 </motion.span>
               )}
             </div>
@@ -289,7 +299,16 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
                 >
-                  ColdMailX
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={logo}
+                      alt="ColdMailX Logo"
+                      className="w-7 h-7 sm:w-12 sm:h-12"
+                    />
+                    <h1 className="text-xl text-white sm:text-2xl font-bold tracking-wide">
+                      <span className="text-purple-500">Cold</span>MailX
+                    </h1>
+                  </div>
                 </motion.div>
 
                 {/* Close Button */}

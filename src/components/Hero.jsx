@@ -6,7 +6,7 @@ import ScrollFade from "../components/ScrollFade";
 import RippleGrid from "./RippleGrid"; // untouched
 import { Link } from "react-router-dom";
 import template from "../assets/image.png";
-
+import logo from "../assets/unnamed (1).png";
 // React Icons
 import {
   FaChartBar,
@@ -63,7 +63,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <div className="relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 gap-12 min-h-[calc(100vh-80px)]">
+        <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 gap-12 min-h-[calc(100vh-80px)] md:pt-12">
           {/* Left Text */}
           <ScrollFade
             direction="left"
@@ -81,11 +81,6 @@ const Hero = () => {
               <Link to="/signup">
                 <button className="px-6 py-3 sm:px-8 sm:py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                   Start Free Today
-                </button>
-              </Link>
-              <Link to="/features">
-                <button className="px-6 py-3 sm:px-8 sm:py-4 border border-cyan-500 hover:bg-cyan-900 text-cyan-400 hover:text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                  Learn More
                 </button>
               </Link>
             </div>
@@ -109,7 +104,7 @@ const Hero = () => {
         </div>
 
         {/* Attribution */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 text-center z-20 hidden sm:block">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 text-center z-20 hidden">
           3D Model: "Google G" by Jarlan Perez [CC-BY] via{" "}
           <a
             href="https://poly.pizza/m/4RKKC0BC4gb"
@@ -240,32 +235,52 @@ const Hero = () => {
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-950 bg-opacity-90 px-6 text-white text-sm">
-          <div className="max-w-8xl mx-auto flex flex-col md:flex-row justify-between items-center border-t border-gray-800 pt-4 gap-4 md:gap-0">
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl font-extrabold text-cyan-400">
-                ColdMailX
-              </h3>
-              <p className="text-gray-400 text-md">
-                AI-powered cold emailing, reimagined for your success.
-              </p>
-              <p className="text-gray-500 text-xs mt-2 mb-2">
+        <footer className="bg-gray-950 bg-opacity-95 text-white">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 py-4">
+            {/* Top Section */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-gray-800 pb-2">
+              {/* Logo + Info */}
+              <div className="text-center md:text-left">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={logo}
+                    alt="ColdMailX Logo"
+                    className="w-7 h-7 sm:w-12 sm:h-12"
+                  />
+                  <h1 className="text-xl text-white sm:text-2xl font-bold tracking-wide">
+                    <span className="text-purple-500">Cold</span>MailX
+                  </h1>
+                </div>
+
+                <p className="text-gray-400 mt-1 text-sm md:text-base max-w-md">
+                  AI-powered cold emailing, reimagined for your success. Scale
+                  smarter. Close faster. Convert better.
+                </p>
+              </div>
+
+              {/* Contact */}
+              <div className="flex flex-col items-center md:items-end">
+                <h4 className="text-lg font-semibold text-cyan-300 mb-1">
+                  Contact Us
+                </h4>
+                <a
+                  href="mailto:coldmailx512@gmail.com"
+                  className="text-purple-300 hover:text-cyan-400 transition-colors duration-300 text-xl sm:text-2xl md:text-2xl font-bold"
+                >
+                  coldmailx512@gmail.com
+                </a>
+              </div>
+            </div>
+
+            {/* Bottom Section */}
+            <div className="flex flex-col md:flex-row justify-between items-center mt-2 text-xs md:text-sm text-gray-500">
+              <p>
                 &copy; {new Date().getFullYear()} ColdMailX. All rights
                 reserved.
               </p>
-            </div>
-            <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-8 text-md">
-              {["Privacy Policy", "Terms of Service", "Support", "Blog"].map(
-                (link, idx) => (
-                  <a
-                    key={idx}
-                    href="#"
-                    className="text-gray-300 hover:text-cyan-400 transition-colors duration-300"
-                  >
-                    {link}
-                  </a>
-                )
-              )}
+              <p className="mt-1 md:mt-0 text-gray-400">
+                Built with ❤️ using React + Tailwind
+              </p>
             </div>
           </div>
         </footer>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react"; // 👀 icons
 import { apiService } from "../services/api";
-
+import logo from "../assets/unnamed (1).png";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -58,14 +58,24 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white px-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white p-4">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="bg-gray-900 border border-gray-800 rounded-xl p-6 sm:p-8 w-full max-w-4xl shadow-2xl"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+        <div className="flex justify-center gap-1">
+          <img
+            src={logo}
+            alt="ColdMailX Logo"
+            className="w-7 h-7 sm:w-8 sm:h-8"
+          />
+          <h1 className="text-xl text-white sm:text-2xl font-bold tracking-wide">
+            <span className="text-purple-500">Cold</span>MailX
+          </h1>
+        </div>
+        <h2 className="text-xl sm:text-3xl font-bold mb-6 text-center">
           Create your <span className="text-purple-500">MailBot</span> account
         </h2>
 

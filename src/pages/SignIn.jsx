@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { apiService } from "../services/api";
 import { toast } from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react"; // 👀 icons
-
+import { Eye, EyeOff } from "lucide-react";
+import logo from "../assets/unnamed (1).png";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 👁 toggle state
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+
+  // ✅ Set dynamic page title
+  useEffect(() => {
+    document.title = "ColdMailX | Sign In";
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,10 +25,7 @@ const SignIn = () => {
     setLoading(true);
 
     try {
-      const res = await apiService("POST", "/users/login", {
-        email,
-        password,
-      });
+      const res = await apiService("POST", "/users/login", { email, password });
 
       localStorage.setItem("user", JSON.stringify(res));
       localStorage.setItem("token", res.token);
@@ -49,7 +51,23 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white px-4 py-6">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white px-4 py-6">
+      {/* 🔥 Logo + Heading */}
+      <div className="flex flex-col items-center mb-6">
+        <img
+          src={logo}
+          alt="ColdMailX Logo"
+          className="w-16 h-16 sm:w-20 sm:h-20 mb-3"
+        />
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-wide">
+          <span className="text-purple-500">Cold</span>MailX
+        </h1>
+        <p className="text-gray-400 text-sm sm:text-base mt-1">
+          Smart Outreach, Simplified
+        </p>
+      </div>
+
+      {/* Card */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -120,38 +138,8 @@ const SignIn = () => {
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="my-6">
-          <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 mb-4">
-            <hr className="flex-grow border-gray-700" />
-            <span className="mx-2 sm:mx-4">or continue with</span>
-            <hr className="flex-grow border-gray-700" />
-          </div>
-
-          {/* Social Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button className="flex items-center justify-center gap-2 flex-1 py-2.5 sm:py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition text-sm sm:text-base">
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-4 h-4 sm:w-5 sm:h-5"
-              />
-              Google
-            </button>
-
-            <button className="flex items-center justify-center gap-2 flex-1 py-2.5 sm:py-3 bg-gray-800 text-white font-semibold rounded-lg border border-gray-600 hover:bg-gray-700 transition text-sm sm:text-base">
-              <img
-                src="https://www.svgrepo.com/show/512317/github-142.svg"
-                alt="GitHub"
-                className="w-4 h-4 sm:w-5 sm:h-5"
-              />
-              GitHub
-            </button>
-          </div>
-        </div>
-
         {/* Footer */}
-        <p className="text-center text-xs sm:text-sm text-gray-400">
+        <p className="text-center text-xs sm:text-sm text-gray-400 mt-6">
           Don’t have an account?{" "}
           <Link
             to="/signup"
